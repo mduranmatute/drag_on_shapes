@@ -4,15 +4,30 @@
  * Solves the incompressible Navier-Stokes equations in the Stokes limit (creeping flow)
  * for flow around a sphere centered in a cubic domain.
  * 
+ * PARALLEL SUPPORT:
+ * - OpenMP: Shared-memory parallelization for multi-core systems
+ * - MPI: Distributed-memory parallelization for clusters
+ * 
  * Features:
  * - Tunable Reynolds number
  * - Sphere diameter = domain size / 2
  * - Adaptive mesh refinement around sphere
  * - Drag force calculation
+ * - Automatic parallelization across cores/processors
  * 
  * Compile and run:
- * qcc -O2 -Wall stokes_sphere.c -o stokes_sphere -lm
- * ./stokes_sphere > output.txt 2>&1
+ * 
+ * Serial:
+ *   qcc -O2 -Wall stokes_sphere.c -o stokes_sphere -lm
+ *   ./stokes_sphere
+ * 
+ * OpenMP (10 cores):
+ *   qcc -O2 -Wall stokes_sphere.c -o stokes_sphere -lm -fopenmp
+ *   OMP_NUM_THREADS=10 ./stokes_sphere
+ * 
+ * MPI (10 processes):
+ *   mpicc -O2 -Wall stokes_sphere.c -o stokes_sphere -lm
+ *   mpirun -np 10 ./stokes_sphere
  */
 
 #include "grid/octree.h"
