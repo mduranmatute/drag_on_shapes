@@ -1,0 +1,37 @@
+# Build artifacts
+*.o
+*.a
+*.so
+stokes_sphere
+stokes_sphere_*
+
+# Simulation outputs
+output-*.vtu
+drag_history.txt
+simulation.log
+compile.log
+
+# Data and results
+simulations/
+Re_*/
+*.log
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Temporary files
+*.tmp
+tmp/
