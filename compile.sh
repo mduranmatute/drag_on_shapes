@@ -82,11 +82,15 @@ fi
 echo -e "${BLUE}╚════════════════════════════════════════════════════════╝${NC}"
 echo ""
 
-# Check source file
+# Check source file - try both naming conventions
 SOURCE_FILE="stokes_sphere_${VERSION}.c"
-if [ ! -f "$SOURCE_FILE" ]; then
-    echo -e "${RED}Error: $SOURCE_FILE not found!${NC}"
+ALT_SOURCE_FILE="stokes_${VERSION}.c"
+
+if [ ! -f "$SOURCE_FILE" ] && [ ! -f "$ALT_SOURCE_FILE" ]; then
+    echo -e "${RED}Error: Neither $SOURCE_FILE nor $ALT_SOURCE_FILE found!${NC}"
     exit 1
+elif [ ! -f "$SOURCE_FILE" ]; then
+    SOURCE_FILE="$ALT_SOURCE_FILE"
 fi
 
 echo -e "${GREEN}Configuration:${NC}"
