@@ -3,7 +3,8 @@
 *.a
 *.so
 stokes_sphere
-stokes_sphere_*
+stokes_minimal
+stokes_minimal_*
 
 # Simulation outputs
 output-*.vtu
