@@ -20,6 +20,23 @@ NUM_CORES=1
 OPTIMIZATION="-O2"
 EXTRA_FLAGS="-Wall"
 
+# Find Basilisk installation
+if [ -z "$BASILISK_PATH" ]; then
+    # Try common locations
+    if [ -d "$HOME/basilisk/src" ]; then
+        BASILISK_PATH="$HOME/basilisk/src"
+    elif [ -d "/opt/basilisk/src" ]; then
+        BASILISK_PATH="/opt/basilisk/src"
+    elif [ -d "/usr/local/basilisk/src" ]; then
+        BASILISK_PATH="/usr/local/basilisk/src"
+    fi
+fi
+
+# Add Basilisk include path if found
+if [ -n "$BASILISK_PATH" ]; then
+    EXTRA_FLAGS="$EXTRA_FLAGS -I$BASILISK_PATH"
+fi
+
 # Parse arguments
 if [ $# -eq 0 ]; then
     VERSION="minimal"
@@ -113,15 +130,15 @@ case $MODE in
         ;;
     
     mpi)
-        echo "  Processes: $NUM_CORES (MPI)"
-        OUTPUT_NAME="stokes_${VERSION}_mpi"
-        COMPILE_CMD="$COMPILER $OPTIMIZATION $EXTRA_FLAGS $SOURCE_FILE -o $OUTPUT_NAME -lm"
-        
-        # Check if mpicc exists
-        if ! command -v mpicc &> /dev/null; then
-            echo -e "${RED}Error: mpicc not found. Install OpenMPI or MPICH.${NC}"
-            exit 1
-        fi
+        echo -e "${RED}Error: MPI compilation not available${NC}"
+        echo ""
+        echo "OpenMPI/MPICH headers not installed on this system."
+        echo "To use MPI, install: sudo apt-get install libopenmpi-dev"
+        echo ""
+        echo "Alternatives:"
+        echo "  - Use serial compilation: $0 $VERSION serial"
+        echo "  - Use OpenMP compilation: $0 $VERSION openmp 4"
+        exit 1
         ;;
 esac
 
