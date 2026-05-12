@@ -47,7 +47,7 @@
 #endif
 
 #ifndef DOMAIN_SIZE
-#define DOMAIN_SIZE 16.0      // Domain size (L)
+#define DOMAIN_SIZE 4.0      // Domain size (L)
 #endif
 
 #ifndef INLET_VEL
@@ -55,7 +55,7 @@
 #endif
 
 #ifndef MAX_TIME
-#define MAX_TIME 100.0        // Simulation time
+#define MAX_TIME 5.0        // Simulation time
 #endif
 
 /**
@@ -97,7 +97,7 @@ int main() {
   
   // Position sphere in center of domain (slightly upstream)
   // Origin at center, sphere upstream by 3*D
-  origin(-3.0*SPHERE_DIAMETER, -L0/2, -L0/2);
+  origin(-L0/2, -L0/2, -L0/2);
   
   // Initial mesh resolution
   init_grid(1 << LEVEL_MIN);
