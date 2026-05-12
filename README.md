@@ -257,6 +257,9 @@ Install Basilisk from http://basilisk.fr/
 ## Documentation
 
 - **README.md** - This file (main documentation)
+- **PROJECT_SUMMARY.md** - High-level project overview and features
+- **WORKFLOW.md** - Complete step-by-step workflow with examples
+- **VISUALIZATION.md** - Guide to generating and interpreting plots
 - **SOLUTION.md** - Technical explanation of embedded boundaries and improvements
 - **CLEANUP.md** - Project cleanup summary (75% reduction in bloat)
 - Inline comments in source files - Annotated implementation details
