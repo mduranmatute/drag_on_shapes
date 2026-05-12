@@ -5,12 +5,20 @@
 stokes_sphere
 stokes_minimal
 stokes_minimal_*
+stokes_improved
+stokes_improved_*
 
 # Simulation outputs
 output-*.vtu
 drag_history.txt
 simulation.log
 compile.log
+velocity_field.txt
+grid_config.txt
+
+# Visualization outputs
+*.png
+*.pdf
 
 # Data and results
 simulations/
