@@ -322,7 +322,74 @@ event stats(i += 10) {
 }
 
 /**
- * End simulation event
+ * Save velocity field at mid-height plane (z = 0) to file for visualization
+ */
+void save_velocity_field(const char * filename) {
+  FILE * fp = fopen(filename, "w");
+  if (!fp) {
+    fprintf(stderr, "Error opening %s for writing\n", filename);
+    return;
+  }
+  
+  // Write header with domain info
+  fprintf(fp, "# Velocity field at mid-height plane (z = 0)\n");
+  fprintf(fp, "# Format: x y u_x u_y\n");
+  fprintf(fp, "# Domain: L0=%.6e, X0=%.6e, Y0=%.6e\n", L0, X0, Y0);
+  fprintf(fp, "# Sphere: diameter=%.6e at origin\n", SPHERE_DIAMETER);
+  
+  // Collect points at z ≈ 0 (mid-height)
+  double z_target = 0.0;
+  double z_tolerance = L0 / (1 << LEVEL_MAX);  // One cell width at max refinement
+  
+  foreach() {
+    // Check if point is near z = 0
+    if (fabs(z - z_target) < 2.0 * z_tolerance && cs[] > 0) {
+      fprintf(fp, "%.8e %.8e %.8e %.8e\n", x, y, u.x[], u.y[]);
+    }
+  }
+  
+  fclose(fp);
+  fprintf(stderr, "Velocity field saved to: %s\n", filename);
+}
+
+/**
+ * Save grid configuration at mid-height plane to file for visualization
+ */
+void save_grid_config(const char * filename) {
+  FILE * fp = fopen(filename, "w");
+  if (!fp) {
+    fprintf(stderr, "Error opening %s for writing\n", filename);
+    return;
+  }
+  
+  // Write header
+  fprintf(fp, "# Grid configuration at mid-height plane (z = 0)\n");
+  fprintf(fp, "# Format: x_min x_max y_min y_max level cs\n");
+  fprintf(fp, "# Domain: L0=%.6e, X0=%.6e, Y0=%.6e\n", L0, X0, Y0);
+  fprintf(fp, "# Sphere: diameter=%.6e at origin\n", SPHERE_DIAMETER);
+  
+  double z_target = 0.0;
+  double z_tolerance = L0 / (1 << LEVEL_MAX);
+  
+  foreach() {
+    // Check if point is near z = 0
+    if (fabs(z - z_target) < 2.0 * z_tolerance) {
+      double h = L0 / pow(2.0, level);
+      double x_min = x - h/2.0;
+      double x_max = x + h/2.0;
+      double y_min = y - h/2.0;
+      double y_max = y + h/2.0;
+      fprintf(fp, "%.8e %.8e %.8e %.8e %d %.8e\n", 
+              x_min, x_max, y_min, y_max, level, cs[]);
+    }
+  }
+  
+  fclose(fp);
+  fprintf(stderr, "Grid configuration saved to: %s\n", filename);
+}
+
+/**
+ * End simulation event - save final state
  */
 event end(t = MAX_TIME) {
   if (pid() == 0) {
@@ -335,6 +402,10 @@ event end(t = MAX_TIME) {
       fclose(drag_file);
       fprintf(stderr, "Drag results saved to: drag_history.txt\n");
     }
+    
+    // Save velocity and grid data for visualization
+    save_velocity_field("velocity_field.txt");
+    save_grid_config("grid_config.txt");
     
     // Print final drag comparison
     fprintf(stderr, "\nSphere parameters:\n");
